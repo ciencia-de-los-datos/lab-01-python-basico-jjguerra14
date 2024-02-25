@@ -12,6 +12,19 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 """
 
+# with open("/tmp/drivers.csv", "r") as file:
+#     drivers = file.readlines()
+
+# drivers = [row.replace("\n", "") for row in drivers]
+# drivers = [row.split(",") for row in drivers]
+# drivers = [row[:2] for row in drivers]
+# pprint(drivers[0:10])
+
+with open("data.csv","r") as file:
+    data=file.readlines()
+
+data=[row.replace("\n"," ")for row in data]
+data=[row.replace("\t",";") for row in data]
 
 def pregunta_01():
     """
@@ -21,8 +34,8 @@ def pregunta_01():
     214
 
     """
-    return
-
+    return sum([int(cadena[2]) for cadena in data])
+#clprint(pregunta_01())
 
 def pregunta_02():
     """
@@ -37,9 +50,21 @@ def pregunta_02():
         ("D", 6),
         ("E", 14),
     ]
-
+letras = [palabra[0] for palabra in data]
+    letra = sorted(list(set(letras)))
+    return [(vocal,letras.count(vocal)) for vocal in letra]
     """
-    return
+    letters=[word[0] for word in data]
+    letter=list(set(letters))
+    values=[]
+    for i in letter:
+        count=letters.count(i)
+        values.append(count)
+    order=list(zip(letter,values))
+    #return sorted(order,key=lambda x: x[1])
+    return sorted(order)
+
+#print(pregunta_02())
 
 
 def pregunta_03():
@@ -57,7 +82,17 @@ def pregunta_03():
     ]
 
     """
-    return
+    dictionary = {}
+    tupla = [(cadena[0], int(cadena[2])) for cadena in data]
+
+    for clave, valor in tupla:
+        if clave not in dictionary.keys():
+            dictionary[clave] = valor
+        else:
+            dictionary[clave] += valor
+    
+    return sorted([(key,value) for key, value in dictionary.items()])
+#print(pregunta_03())
 
 
 def pregunta_04():
@@ -82,7 +117,11 @@ def pregunta_04():
     ]
 
     """
-    return
+    meses = [palabra[9:11] for palabra in data]
+    mes = sorted(list(set(meses)))
+    return [(vocal,meses.count(vocal)) for vocal in mes]
+
+# |
 
 
 def pregunta_05():
@@ -100,8 +139,17 @@ def pregunta_05():
     ]
 
     """
-    return
+    dictionary = {}
+    tupla = [(cadena[0], int(cadena[2])) for cadena in data]
 
+    for clave, valor in tupla:
+        if clave not in dictionary.keys():
+            dictionary[clave] = [valor]
+        else:
+            dictionary[clave] += [valor]
+    
+    return sorted([(key,max(value),min(value)) for key, value in dictionary.items()])
+#print(pregunta_05())  
 
 def pregunta_06():
     """
@@ -125,7 +173,18 @@ def pregunta_06():
     ]
 
     """
-    return
+    lista = [cadena.split(";") for cadena in data]
+    lista = [cadena[4].split(",") for cadena in lista]
+    dictionary = {}
+    for l in lista:
+        for valores in l:
+            if valores[0:4] not in dictionary.keys():
+                dictionary[valores[0:4]] = [int(valores[4:])]
+            else:
+                dictionary[valores[0:4]] += [int(valores[4:])]
+    
+    return sorted([(key,min(value),max(value)) for key, value in dictionary.items()])
+#print(pregunta_06())
 
 
 def pregunta_07():
@@ -147,9 +206,19 @@ def pregunta_07():
         (8, ["E", "D", "E", "A", "B"]),
         (9, ["A", "B", "E", "A", "A", "C"]),
     ]
-
+"
     """
-    return
+    dictionary = {}
+    tupla = [(int(cadena[2]), cadena[0]) for cadena in data]
+
+    for clave, valor in tupla:
+        if clave not in dictionary.keys():
+            dictionary[clave] = [valor]
+        else:
+            dictionary[clave] += [valor]
+    
+    return sorted([(key,value) for key, value in dictionary.items()])
+#print(pregunta_07())
 
 
 def pregunta_08():
@@ -174,10 +243,24 @@ def pregunta_08():
     ]
 
     """
-    return
+
+    dictionary = {}
+    tupla = [(int(cadena[2]), cadena[0]) for cadena in data]
+
+    for clave, valor in tupla:
+        if clave not in dictionary.keys():
+            dictionary[clave] = [valor]
+        else:
+            dictionary[clave] += [valor]
+    
+    return sorted([(key,sorted(list(set(value)))) for key, value in dictionary.items()]) 
+
+
+#print(pregunta_08())
 
 
 def pregunta_09():
+
     """
     Retorne un diccionario que contenga la cantidad de registros en que aparece cada
     clave de la columna 5.
@@ -197,7 +280,19 @@ def pregunta_09():
     }
 
     """
-    return
+    lista = [cadena.split(";") for cadena in data]
+    lista = [cadena[4].split(",") for cadena in lista]
+    dictionary = {}
+    for l in lista:
+        for valores in l:
+            if valores[0:4] not in dictionary.keys():
+                dictionary[valores[0:4]] = 1
+            else:
+                dictionary[valores[0:4]] += 1
+
+    return dict(sorted([(key,value) for key, value in dictionary.items()]))
+#print(pregunta_09())
+
 
 
 def pregunta_10():
@@ -218,7 +313,15 @@ def pregunta_10():
 
 
     """
-    return
+    lista = [cadena.split(";") for cadena in data]
+    tupla = []
+    for sentence in lista:
+        sentence.remove(sentence[1]) 
+        sentence.remove(sentence[1])
+        tupla.append((sentence[0],len((sentence[1]).split(",")),len((sentence[2]).split(",")),))
+    return tupla
+#print(pregunta_10())
+
 
 
 def pregunta_11():
@@ -239,7 +342,26 @@ def pregunta_11():
 
 
     """
-    return
+    lista = [cadena.split(";") for cadena in data]
+
+    dictionary = {}
+    for sentence in lista:
+        sentence.remove(sentence[0]) 
+        sentence.remove(sentence[1])
+        sentence.remove(sentence[2])
+
+    for numero in lista:
+        numero[0] = int(numero[0])
+
+    for sentence in lista:
+        for letra in sentence[1].split(","):
+            if letra not in dictionary.keys():
+                dictionary[letra] = sentence[0]
+            else:
+                dictionary[letra] += sentence[0]
+
+    return dict(sorted(dictionary.items()))
+#print(pregunta_11())
 
 
 def pregunta_12():
@@ -257,4 +379,31 @@ def pregunta_12():
     }
 
     """
-    return
+    lista = [cadena.split(";") for cadena in data]
+
+    dictionary = {}
+    for sentence in lista:
+        sentence.remove(sentence[1])
+        sentence.remove(sentence[1])  
+        sentence.remove(sentence[1])
+
+
+    lista = [[elemento[0],elemento[1].split(",")] for elemento in lista]
+    #lista = [[elemento[0]] + elemento[1] for elemento in lista]
+    
+    #lista_sin_tres_letras = [[fila[0], [dato[4:] for dato in fila[1]]] for fila in lista]
+    dictionary = {}
+    for fila in lista:
+        for dato in fila[1]:
+            if fila[0] in dictionary.keys():
+                dictionary[fila[0]] += int(dato[4:])
+            else:
+                dictionary[fila[0]] = int(dato[4:])
+
+            #lista2.append([fila[0], dato[4:]])
+
+
+    return dict(sorted(dictionary.items()))
+    
+ 
+#print(pregunta_12())s
