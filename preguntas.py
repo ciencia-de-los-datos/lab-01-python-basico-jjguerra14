@@ -179,9 +179,9 @@ def pregunta_06():
     for l in lista:
         for valores in l:
             if valores[0:4] not in dictionary.keys():
-                dictionary[valores[0:4]] = [int(valores[4:])]
+                dictionary[valores[0:3]] = [int(valores[4:])]
             else:
-                dictionary[valores[0:4]] += [int(valores[4:])]
+                dictionary[valores[0:3]] += [int(valores[4:])]
     
     return sorted([(key,min(value),max(value)) for key, value in dictionary.items()])
 #print(pregunta_06())
@@ -286,12 +286,13 @@ def pregunta_09():
     for l in lista:
         for valores in l:
             if valores[0:4] not in dictionary.keys():
-                dictionary[valores[0:4]] = 1
+                dictionary[valores[0:3]] = 1
             else:
-                dictionary[valores[0:4]] += 1
+                dictionary[valores[0:3]] += 1
 
     return dict(sorted([(key,value) for key, value in dictionary.items()]))
 #print(pregunta_09())
+
 
 
 
@@ -406,4 +407,4 @@ def pregunta_12():
     return dict(sorted(dictionary.items()))
     
  
-#print(pregunta_12())s
+#print(pregunta_12())
